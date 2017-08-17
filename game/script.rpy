@@ -62,7 +62,7 @@ init python:
             return int(round(float(val)))
 
         def render(self, width, height, st, at):
-                
+
             pic_rend = renpy.render(self.pic, width, height, st, at)
             w, h = self.base_size = fixMap(self.rndInt, pic_rend.get_size())
             if not self.cached_pics:
@@ -85,7 +85,7 @@ init python:
                 )
             renpy.redraw(self, (self.random() * self.speed_multipler))
             return renderObj
-            
+
 init:
     image spok = "mr_spok.png"
     image spok glitch = Glitch("mr_spok.png")
