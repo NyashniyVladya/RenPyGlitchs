@@ -6,6 +6,8 @@ init python:
 
     class Glitch(renpy.Displayable, Random, NoRollback):
 
+        __author__ = u"Vladya"
+
         def __init__(self, pic, speed_multipler=.5):
             super(Glitch, self).__init__()
             self.pic = renpy.easy.displayable(pic)
@@ -76,12 +78,12 @@ init python:
                 surface = renpy.render(pic, width, height, st, at)
                 sizeX, sizeY = surface.get_size()
                 x, y = pos
-                x -= self.rndInt((float((sizeX - oldX)) / 2.))
-                y -= self.rndInt((float((sizeY - oldY)) / 2.))
+                x -= (float((sizeX - oldX)) / 2.)
+                y -= (float((sizeY - oldY)) / 2.)
                 x += (sizeX * self.uniform(-.2, .2))
                 renderObj.blit(
                     renpy.render(pic, width, height, st, at),
-                    (x, y)
+                    tuple(fixMap(self.rndInt, (x, y)))
                 )
             renpy.redraw(self, (self.random() * self.speed_multipler))
             return renderObj
