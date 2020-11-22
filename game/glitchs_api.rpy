@@ -12,7 +12,7 @@ init -100 python in _glitch_setting:
     class _Glitch(renpy.Displayable, NoRollback):
 
         __author__ = "Vladya"
-        __version__ = "2.0.0"
+        __version__ = "2.0.1"
 
         def __init__(self, child=None, glitch_strength=.05, _fps=5., **kwargs):
 
@@ -194,6 +194,7 @@ init -100 python in _glitch_setting:
         @staticmethod
         def zoom_surface(surface, xzoom, yzoom=None):
 
+            surface = surface.subsurface((0, 0, surface.width, surface.height))
             if yzoom is None:
                 yzoom = xzoom
 
@@ -201,12 +202,12 @@ init -100 python in _glitch_setting:
             width, height = map(float, surface.get_size())
             width *= xzoom
             height *= yzoom
+            width, height = map(lambda x: (abs(int(x)) or 1), (width, height))
 
-            width, height = map(lambda x: (int(x) or 1), (width, height))
             result_render = renpy.Render(width, height)
 
-            surface = surface.subsurface((0, 0, width, height))
             surface.zoom(xzoom, yzoom)
+            surface = surface.subsurface((0, 0, width, height))
 
             result_render.blit(surface, (0, 0))
 
@@ -218,6 +219,7 @@ init -100 python in _glitch_setting:
             Делит текстуру на фрагменты
             """
 
+            surface = surface.subsurface((0, 0, surface.width, surface.height))
             w, h = map(float, surface.get_size())
             result_render = renpy.Render(*map(int, (w, h)))
 
@@ -234,9 +236,13 @@ init -100 python in _glitch_setting:
                     *render_args
                 )
 
-                xzoom = random.uniform(1., (1. + self.glitch_strength))
-                yzoom = (random.uniform((1. - self.glitch_strength), 1.) or .1)
+                xzoom_addition = random.uniform(.0, 1.)
+                yzoom_addition = random.uniform((-1.), .0)
+
+                xzoom = ((1. + (xzoom_addition * self.glitch_strength)) or .1)
+                yzoom = ((1. + (yzoom_addition * self.glitch_strength)) or .1)
                 subsurface = self.zoom_surface(subsurface, xzoom, yzoom)
+
                 if random.random() < .5:
                     _n = int((float(number_of_elements) / 10.))
                     if _n:
