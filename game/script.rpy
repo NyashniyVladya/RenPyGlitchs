@@ -26,5 +26,5 @@ label start:
     l "[e], что ты делаешь с диалоговым окном?"
     show layer screens at Glitch(glitch_strength=.75)
     e vhappy "А что я с ним делаю?"
-    $ ui.interact()
+    #$ ui.interact()# отрубает ui нафиг. После этого только через диспетчер задач вырубать процесс.
     return
